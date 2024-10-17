@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class createUserDto {
+public class CreateUserDto {
     @NotNull(message = "name должно быть указано.")
     @NotBlank(message = "name не должен быть пустым.")
     private String name;

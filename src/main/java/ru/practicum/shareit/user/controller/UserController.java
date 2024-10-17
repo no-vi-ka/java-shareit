@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.user.dto.createUserDto;
-import ru.practicum.shareit.user.dto.updateUserDto;
+import ru.practicum.shareit.user.dto.CreateUserDto;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -19,13 +19,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody @Valid createUserDto dtoUser) {
+    public User createUser(@RequestBody @Valid CreateUserDto dtoUser) {
         log.info("Пришёл запрос на создание пользователя с email: {}.", dtoUser.getEmail());
         return userService.createUser(dtoUser);
     }
 
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable Integer id, @RequestBody updateUserDto dtoUser) {
+    public User updateUser(@PathVariable Integer id, @RequestBody UpdateUserDto dtoUser) {
         log.info("Пришёл запрос на обновление пользователя с email: {}.", dtoUser.getEmail());
         return userService.updateUser(id, dtoUser);
     }

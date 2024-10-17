@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class updateUserDto {
+public class UpdateUserDto {
     private String name;
     @Email(message = "email должен быть указан корректно.")
     private String email;

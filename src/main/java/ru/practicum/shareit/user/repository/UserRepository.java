@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exceptions.EmailAlreadyInUseException;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.user.dto.createUserDto;
-import ru.practicum.shareit.user.dto.updateUserDto;
+import ru.practicum.shareit.user.dto.CreateUserDto;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
@@ -24,7 +24,7 @@ public class UserRepository {
     private Map<Integer, User> users = new HashMap<>();
     private Integer id = 0;
 
-    public User createUser(createUserDto dtoUser) {
+    public User createUser(CreateUserDto dtoUser) {
         User user = userMapper.toUserFromCreateDto(dtoUser);
         for (User u : users.values()) {
             if (u.getEmail().equals(user.getEmail())) {
@@ -37,7 +37,7 @@ public class UserRepository {
         return user;
     }
 
-    public User updateUser(Integer id, updateUserDto dtoUser) {
+    public User updateUser(Integer id, UpdateUserDto dtoUser) {
         checkContainsUserById(id);
         checkEmailAlreadyInUse(dtoUser.getEmail(), id);
         User user = users.get(id);
