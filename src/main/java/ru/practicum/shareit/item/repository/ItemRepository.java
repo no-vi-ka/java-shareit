@@ -35,10 +35,9 @@ public class ItemRepository {
     }
 
     public Item updateItem(UpdateItemDto itemDto, Integer userId, Integer itemId) {
-        checkContainsItemById(itemId);
+        Item item = getItemById(itemId);
         userRepository.checkContainsUserById(userId);
-        checkBelongingToOwner(items.get(itemId), userId);
-        Item item = items.get(itemId);
+        checkBelongingToOwner(item, userId);
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
         }
@@ -56,7 +55,7 @@ public class ItemRepository {
     public Item getItemById(Integer itemId) {
         checkContainsItemById(itemId);
         log.info("Получена вещь с id: {}.", itemId);
-        return items.get(itemId);
+        return Optional.ofNullable(items.get(itemId)).orElseThrow(() -> new NotFoundException("Вещь с id = " + itemId + " не найдена."));
     }
 
     public List<Item> getItemsByUserId(Integer userId) {

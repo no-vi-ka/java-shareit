@@ -38,9 +38,8 @@ public class UserRepository {
     }
 
     public User updateUser(Integer id, UpdateUserDto dtoUser) {
-        checkContainsUserById(id);
+        User user = getUserById(id);
         checkEmailAlreadyInUse(dtoUser.getEmail(), id);
-        User user = users.get(id);
         if (dtoUser.getName() != null) {
             user.setName(dtoUser.getName());
         }
@@ -60,9 +59,8 @@ public class UserRepository {
     }
 
     public User getUserById(Integer userId) {
-        checkContainsUserById(userId);
-        log.info("Получен пользователь с id: {}.", id);
-        return users.get(userId);
+        log.info("Получен пользователь с id: {}.", userId);
+        return Optional.ofNullable(users.get(userId)).orElseThrow(() -> new NotFoundException("Пользователь с id = " + id + " не найден."));
     }
 
     public void deleteUser(Integer id) {
