@@ -16,11 +16,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ItemRequest {
     @Positive(message = "Значение id должно быть положительным.")
-    Integer id;
-    String description;
+    private Integer id;
+    @NotNull(message = "description должен быть указан.")
+    @NotBlank(message = "description не должен быть пустым.")
+    private String description;
     @NotNull(message = "requestor должен быть указан.")
     @NotBlank(message = "requestor не должен быть пустым.")
-    User requestor;
+    private User requestor;
     @PastOrPresent(message = "created не может быть в будущем.")
     LocalDateTime created;
 }

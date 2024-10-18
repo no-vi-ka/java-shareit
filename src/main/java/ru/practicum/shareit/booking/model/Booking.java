@@ -15,20 +15,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Booking {
     @Positive(message = "Значение id должно быть положительным.")
-    Integer id;
+    private Integer id;
     @NotNull(message = "start должен быть указан.")
     @FutureOrPresent(message = "start не может быть в прошлом.")
-    LocalDateTime start;
+    private LocalDateTime start;
     @NotNull(message = "end должен быть указан.")
     @Future(message = "end не может быть в прошлом.")
-    LocalDateTime end;
+    private LocalDateTime end;
     @NotNull(message = "item должен быть указан.")
     @NotBlank(message = "item не должен быть пустым.")
-    Item item;
+    private Item item;
     @NotNull(message = "user должен быть указан.")
     @NotBlank(message = "booker не должен быть пустым.")
-    User booker;
+    private User booker;
     @NotNull(message = "status должен быть указан.")
     @NotBlank(message = "status не должен быть пустым.")
-    Status status;
+    private Status status;
 }
