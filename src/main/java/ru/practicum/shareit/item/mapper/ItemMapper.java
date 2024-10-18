@@ -1,11 +1,12 @@
 package ru.practicum.shareit.item.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import ru.practicum.shareit.item.dto.CreateItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
 
-@Mapper(componentModel = "spring")
+@Mapper (componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ItemMapper {
     Item toItemFromCreateDto(CreateItemDto itemDto);
 
