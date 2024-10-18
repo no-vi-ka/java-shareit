@@ -10,9 +10,7 @@ import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -22,6 +20,7 @@ public class UserRepository {
     private final UserMapper userMapper;
 
     private Map<Integer, User> users = new HashMap<>();
+    private Set<String> emails = new HashSet<>();
     private Integer id = 0;
 
     public User createUser(CreateUserDto dtoUser) {
@@ -33,6 +32,7 @@ public class UserRepository {
         }
         user.setId(++id);
         users.put(id, user);
+        emails.add(user.getEmail());
         log.info("Создан пользователь с id: {}.", id);
         return user;
     }
@@ -45,7 +45,9 @@ public class UserRepository {
             user.setName(dtoUser.getName());
         }
         if (dtoUser.getEmail() != null) {
+            emails.remove(user.getEmail());
             user.setEmail(dtoUser.getEmail());
+            emails.add(user.getEmail());
         }
         users.put(id, user);
         log.info("Обновлен пользователь с id: {}.", id);
@@ -76,9 +78,7 @@ public class UserRepository {
     }
 
     private void checkEmailAlreadyInUse(String email, Integer id) {
-        List<String> emails = users.values().stream().map(u -> u.getEmail()).collect(Collectors.toList());
-        emails.remove(users.get(id).getEmail());
-        if (emails.contains(email)) {
+        if (emails.contains(email) && (!users.get(id).getEmail().equals(email))) {
             throw new EmailAlreadyInUseException("Email " + email + " уже используется");
         }
     }
