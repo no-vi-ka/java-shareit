@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import ru.practicum.shareit.item.dto.CreateItemDto;
+import ru.practicum.shareit.item.dto.ItemWithCommentsDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
 
@@ -12,7 +13,11 @@ public interface ItemMapper {
 
     Item toItemFromUpdateDto(UpdateItemDto itemDto);
 
+    Item toItemFromItemWithCommentsDto(ItemWithCommentsDto itemWithCommentsDto);
+
     CreateItemDto toCreateItemDto(Item item);
 
     UpdateItemDto toUpdateItemDto(Item item);
+
+    ItemWithCommentsDto toItemWithCommentsDtoFromItem(Item item);
 }

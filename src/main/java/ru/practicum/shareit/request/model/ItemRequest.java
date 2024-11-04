@@ -1,28 +1,22 @@
 package ru.practicum.shareit.request.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
-
-@Data
+@Getter
+@Setter
+@Entity
 @Builder
+@Table(name = "requests")
 @AllArgsConstructor
 public class ItemRequest {
-    @Positive(message = "Значение id должно быть положительным.")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull(message = "description должен быть указан.")
-    @NotBlank(message = "description не должен быть пустым.")
+    @Column(name = "description", nullable = false, length = 1024)
     private String description;
-    @NotNull(message = "requestor должен быть указан.")
-    @NotBlank(message = "requestor не должен быть пустым.")
+    @ManyToOne
+    @JoinColumn(name = "requestor_id", referencedColumnName = "id", nullable = false)
     private User requestor;
-    @PastOrPresent(message = "created не может быть в будущем.")
-    LocalDateTime created;
 }
