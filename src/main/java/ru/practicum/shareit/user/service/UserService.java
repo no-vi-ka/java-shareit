@@ -22,10 +22,14 @@ public class UserService {
     private final UserMapper userMapper;
 
     public User createUser(CreateUserDto dtoUser) {
-        User createdUser = userMapper.toUserFromCreateDto(dtoUser);
-        emailValidation(createdUser);
+        User created = User.builder()
+                .name(dtoUser.getName())
+                        .email(dtoUser.getEmail())
+                                .build();
+        //User createdUser = userMapper.toUserFromCreateDto(dtoUser);
+        emailValidation(created);
         log.info("User создан.");
-        return userRepository.save(createdUser);
+        return userRepository.save(created);
     }
 
     public User updateUser(Integer id, UpdateUserDto dtoUser) {
