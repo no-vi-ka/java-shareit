@@ -18,5 +18,4 @@ public class ItemWithCommentsDto {
         private List<CommentDto> comments;
         private BookingDto lastBooking;
         private BookingDto nextBooking;
-    }
-
+}

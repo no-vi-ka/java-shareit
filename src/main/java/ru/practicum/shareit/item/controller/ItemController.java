@@ -65,8 +65,8 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentDto createCommentDto(@RequestBody @Valid CommentDto commentDto,
-                                    @PathVariable Integer itemId,
-                                    @RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId) {
+                                       @PathVariable Integer itemId,
+                                       @RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId) {
         log.info("Пришел запрос на создание комментария для вещи с id = {}", itemId);
         return itemService.createComment(userId, itemId, commentDto);
     }

@@ -12,7 +12,7 @@ public class CommentMapper {
                 .text(commentDto.getText())
                 .created(commentDto.getCreated())
                 .build();
-    };
+    }
 
     public CommentDto toCommentDtoFromComment(Comment comment) {
         return CommentDto.builder()
@@ -21,5 +21,5 @@ public class CommentMapper {
                 .authorName(comment.getAuthor().getName())
                 .created(comment.getCreated())
                 .build();
-    };
+    }
 }

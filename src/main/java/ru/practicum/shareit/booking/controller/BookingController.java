@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.user.dto.CreateUserDto;
-import ru.practicum.shareit.user.model.User;
 
-import java.awt.print.Book;
 import java.util.List;
 
 @Slf4j
