@@ -8,7 +8,6 @@ import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
-import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
