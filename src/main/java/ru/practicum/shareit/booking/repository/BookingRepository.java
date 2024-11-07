@@ -14,50 +14,48 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findAllByBookerId(Integer bookerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.booker.id = ?1 " +
+            "WHERE b.booker.id = :bookerId " +
             "AND current_timestamp < b.start")
     List<Booking> findByBookerAndStateCurrent(Integer bookerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.booker.id = ?1 " +
+            "WHERE b.booker.id = :bookerId " +
             "AND current_timestamp > b.end")
     List<Booking> findByBookerAndStatePast(Integer bookerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.booker.id = ?1 " +
+            "WHERE b.booker.id = :bookerId " +
             "AND current_timestamp < b.start")
     List<Booking> findByBookerAndStateFuture(Integer bookerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.booker.id = ?1 " +
-            "AND b.status = ?2")
+            "WHERE b.booker.id = :bookerId " +
+            "AND b.status = :status")
     List<Booking> findAllByBookerIdAndStatus(Integer bookerId, Status status);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.owner.id = ?1")
+            "WHERE b.item.owner.id = :ownerId")
     List<Booking> findAllByOwnerId(Integer ownerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.owner.id = ?1 " +
+            "WHERE b.item.owner.id = :ownerId " +
             "AND current_timestamp < b.start")
     List<Booking> findByOwnerAndStateCurrent(Integer ownerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.owner.id = ?1 " +
+            "WHERE b.item.owner.id = :ownerId " +
             "AND current_timestamp > b.end")
     List<Booking> findByOwnerAndStatePast(Integer ownerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.owner.id = ?1 " +
+            "WHERE b.item.owner.id = :ownerId " +
             "AND current_timestamp < b.start")
     List<Booking> findByOwnerAndStateFuture(Integer ownerId);
 
     @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.owner.id = ?1 " +
-            "AND b.status = ?2")
+            "WHERE b.item.owner.id = :ownerId " +
+            "AND b.status = :status")
     List<Booking> findAllByOwnerIdAndStatus(Integer ownerId, Status status);
-
-    Boolean existsByBookerIdAndItemIdAndEndBefore(Integer bookerId, Integer itemId, LocalDateTime localDateTime);
 
     List<Booking> findAllByBookerIdAndItemIdAndStatusAndEndBefore(Integer userId, Integer itemId, Status status, LocalDateTime now);
 }

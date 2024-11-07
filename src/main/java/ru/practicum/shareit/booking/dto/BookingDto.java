@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 public class BookingDto {
-    @FutureOrPresent
+    @FutureOrPresent(message = "start не должен быть в прошлом.")
     private LocalDateTime start;
-    @Future
+    @Future(message = "end должен быть в будущем.")
     private LocalDateTime end;
     private Integer itemId;
 }
