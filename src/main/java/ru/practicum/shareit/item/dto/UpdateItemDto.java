@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class UpdateItemDto {
     private String name;

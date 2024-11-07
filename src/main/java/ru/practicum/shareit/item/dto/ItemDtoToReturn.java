@@ -2,16 +2,17 @@ package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.model.User;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateItemDto {
+public class ItemDtoToReturn {
+    private Integer id;
     @NotNull(message = "name должно быть указано.")
     @NotBlank(message = "name не должно быть пустым.")
     private String name;
@@ -20,4 +21,8 @@ public class CreateItemDto {
     private String description;
     @NotNull(message = "Статус available должен быть указан.")
     private Boolean available;
+    @NotNull(message = "owner должен быть указан.")
+    @NotBlank(message = "owner не должен быть пустым.")
+    private User owner;
+    private ItemRequest request;
 }

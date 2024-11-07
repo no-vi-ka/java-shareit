@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.ReturnBookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -28,7 +29,7 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-    public Booking createBooking(@Valid BookingDto dtoBooking, Integer userId) {
+    public ReturnBookingDto createBooking(@Valid BookingDto dtoBooking, Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " is not found."));
         Item item = itemRepository.findById(dtoBooking.getItemId()).orElseThrow(
@@ -40,10 +41,10 @@ public class BookingService {
         created.setBooker(user);
         created.setItem(item);
         created.setStatus(Status.WAITING);
-        return bookingRepository.save(created);
+        return bookingMapper.toReturnBookingDto(bookingRepository.save(created));
     }
 
-    public Booking setApprove(Integer bookingId, Boolean isApproved, Integer userId) {
+    public ReturnBookingDto setApprove(Integer bookingId, Boolean isApproved, Integer userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                 () -> new NotFoundException("Booking with id = " + bookingId + " is not found."));
         if (!booking.getStatus().equals(Status.WAITING)) {
@@ -61,21 +62,21 @@ public class BookingService {
         } else {
             booking.setStatus(Status.REJECTED);
         }
-        return bookingRepository.save(booking);
+        return bookingMapper.toReturnBookingDto(bookingRepository.save(booking));
     }
 
-    public Booking getBookingById(Integer bookingId, Integer userId) {
+    public ReturnBookingDto getBookingById(Integer bookingId, Integer userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                 () -> new EntityNotFoundException("Бронирование не найдено"));
         if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwner().getId().equals(userId)) {
             throw new ValidationException("User with id = " + userId
                     + " is not owner or booker and can not view this booking.");
         }
-        return booking;
+        return bookingMapper.toReturnBookingDto(booking);
     }
 
 
-    public List<Booking> getAllByBooker(String state, Integer bookerId) {
+    public List<ReturnBookingDto> getAllByBooker(String state, Integer bookerId) {
         if (!userRepository.existsById(bookerId)) {
             throw new NotFoundException("User with id = " + bookerId + " is not found.");
         }
@@ -86,16 +87,28 @@ public class BookingService {
             throw new ValidationException("State " + state + " is not support");
         }
         return switch (stateFromString) {
-            case ALL -> bookingRepository.findAllByBookerId(bookerId);
-            case CURRENT -> bookingRepository.findByBookerAndStateCurrent(bookerId);
-            case PAST -> bookingRepository.findByBookerAndStatePast(bookerId);
-            case FUTURE -> bookingRepository.findByBookerAndStateFuture(bookerId);
-            case WAITING -> bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.WAITING);
-            case REJECTED -> bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.REJECTED);
+            case ALL -> bookingRepository.findAllByBookerId(bookerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case CURRENT -> bookingRepository.findByBookerAndStateCurrent(bookerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case PAST -> bookingRepository.findByBookerAndStatePast(bookerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case FUTURE -> bookingRepository.findByBookerAndStateFuture(bookerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case WAITING -> bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.WAITING).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case REJECTED -> bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.REJECTED).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
         };
     }
 
-    public List<Booking> getAllByOwner(String state, Integer ownerId) {
+    public List<ReturnBookingDto> getAllByOwner(String state, Integer ownerId) {
         if (!userRepository.existsById(ownerId)) {
             throw new NotFoundException("User with id = " + ownerId + " is not found.");
         }
@@ -106,12 +119,24 @@ public class BookingService {
             throw new ValidationException("State " + state + " is not support");
         }
         return switch (stateFromString) {
-            case ALL -> bookingRepository.findAllByOwnerId(ownerId);
-            case CURRENT -> bookingRepository.findByOwnerAndStateCurrent(ownerId);
-            case PAST -> bookingRepository.findByOwnerAndStatePast(ownerId);
-            case FUTURE -> bookingRepository.findByOwnerAndStateFuture(ownerId);
-            case WAITING -> bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.WAITING);
-            case REJECTED -> bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.REJECTED);
+            case ALL -> bookingRepository.findAllByOwnerId(ownerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case CURRENT -> bookingRepository.findByOwnerAndStateCurrent(ownerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case PAST -> bookingRepository.findByOwnerAndStatePast(ownerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case FUTURE -> bookingRepository.findByOwnerAndStateFuture(ownerId).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case WAITING -> bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.WAITING).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
+            case REJECTED -> bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.REJECTED).stream()
+                    .map(bookingMapper::toReturnBookingDto)
+                    .toList();
         };
     }
 }
