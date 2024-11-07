@@ -14,22 +14,22 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 public class ReturnBookingDto {
-    @NotNull(message = "id .")
-    @Positive(message = "id .")
+    @NotNull(message = "id должен быть указан.")
+    @Positive(message = "id должен быть положительным.")
     private Integer id;
-    @NotNull(message = "start .")
-    @FutureOrPresent(message = "start .")
+    @NotNull(message = "start должен быть указан.")
+    @FutureOrPresent(message = "start не должен быть в прошлом.")
     private LocalDateTime start;
-    @NotNull(message = "end .")
-    @Future(message = "end .")
+    @NotNull(message = "end должен быть указан.")
+    @Future(message = "end должен быть в будущем.")
     private LocalDateTime end;
-    @NotNull(message = "item .")
-    @NotBlank(message = "item .")
+    @NotNull(message = "item должен быть указан.")
+    @NotBlank(message = "item не должен быть пустым.")
     private Item item;
-    @NotNull(message = "booker .")
-    @NotBlank(message = "booker .")
+    @NotNull(message = "booker должен быть указан.")
+    @NotBlank(message = "booker не должен быть пустым.")
     private User booker;
-    @NotNull(message = "status .")
-    @NotBlank(message = "status .")
+    @NotNull(message = "status должен быть указан.")
+    @NotBlank(message = "status не должен быть пустым.")
     private Status status;
 }
