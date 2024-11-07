@@ -6,8 +6,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.ReturnBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 
-import java.awt.print.Book;
-
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BookingMapper {
     Booking toBookingFromBookingDto(BookingDto bookingDto);
