@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.CreateItemDto;
-import ru.practicum.shareit.item.dto.ItemWithCommentsDto;
-import ru.practicum.shareit.item.dto.UpdateItemDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
@@ -36,15 +33,15 @@ public class ItemService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public Item createItem(CreateItemDto itemDto, Integer userId) {
+    public ItemDtoToReturn createItem(CreateItemDto itemDto, Integer userId) {
         Item itemFromDto = itemMapper.toItemFromCreateDto(itemDto);
         itemFromDto.setOwner(userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " not found.")));
         log.info("Item was created.");
-        return itemRepository.save(itemFromDto);
+        return itemMapper.toItemDtoToReturn(itemRepository.save(itemFromDto));
     }
 
-    public Item updateItem(UpdateItemDto itemDto, Integer userId, Integer itemId) {
+    public ItemDtoToReturn updateItem(UpdateItemDto itemDto, Integer userId, Integer itemId) {
         Item itemFromTable = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item with id = " + itemId + " not found."));
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id = " + userId + " is not found.");
@@ -65,7 +62,7 @@ public class ItemService {
             itemFromTable.setAvailable(available);
         }
         log.info("Item with id = " + itemId + " was updated.");
-        return itemRepository.save(itemFromTable);
+        return itemMapper.toItemDtoToReturn(itemRepository.save(itemFromTable));
     }
 
     public ItemWithCommentsDto getItemById(Integer itemId) {
@@ -77,8 +74,8 @@ public class ItemService {
         return itemWithCommentsDto;
     }
 
-    public List<Item> getItemsByUserId(Integer userId) {
-        return itemRepository.findAllByOwnerId(userId);
+    public List<ItemDtoToReturn> getItemsByUserId(Integer userId) {
+        return itemRepository.findAllByOwnerId(userId).stream().map(itemMapper::toItemDtoToReturn).toList();
     }
 
     public void deleteItem(Item item, Integer userId) {
@@ -92,7 +89,7 @@ public class ItemService {
         log.info("Delete Item with id = {}", item.getId());
     }
 
-    public List<Item> searchItems(Integer userId, String text) {
+    public List<ItemDtoToReturn> searchItems(Integer userId, String text) {
         if (text.isEmpty() || text.isBlank()) {
             return Collections.emptyList();
         }
@@ -102,6 +99,7 @@ public class ItemService {
         log.info("Search for Items by text {} was completed.", text);
         return itemRepository.search(text).stream()
                 .filter(Item::getAvailable)
+                .map(itemMapper::toItemDtoToReturn)
                 .toList();
     }
 

@@ -7,6 +7,7 @@ import ru.practicum.shareit.exceptions.EmailAlreadyInUseException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.user.dto.CreateUserDto;
+import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -21,14 +22,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public User createUser(CreateUserDto dtoUser) {
+    public ReturnUserDto createUser(CreateUserDto dtoUser) {
         User createdUser = userMapper.toUserFromCreateDto(dtoUser);
         emailValidation(createdUser);
         log.info("User создан.");
-        return userRepository.save(createdUser);
+        return userMapper.toReturnUserDto(userRepository.save(createdUser));
     }
 
-    public User updateUser(Integer id, UpdateUserDto dtoUser) {
+    public ReturnUserDto updateUser(Integer id, UpdateUserDto dtoUser) {
         User userFromTable = userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User with id = " + id + " not found."));
         User userFromDto = userMapper.toUserFromUpdateDto(dtoUser);
@@ -40,16 +41,16 @@ public class UserService {
             userFromTable.setName(userFromDto.getName());
         }
         log.info("User с id = " + id + " обновлен.");
-        return userRepository.save(userFromTable);
+        return userMapper.toReturnUserDto(userRepository.save(userFromTable));
     }
 
-    public User getUserById(Integer id) {
-        return userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("User with id = " + id + " not found."));
+    public ReturnUserDto getUserById(Integer id) {
+        return userMapper.toReturnUserDto(userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User with id = " + id + " not found.")));
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<ReturnUserDto> getUsers() {
+        return userRepository.findAll().stream().map(userMapper::toReturnUserDto).toList();
     }
 
     public void deleteUser(Integer id) {

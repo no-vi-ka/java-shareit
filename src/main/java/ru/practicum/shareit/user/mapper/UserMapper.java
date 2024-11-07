@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import ru.practicum.shareit.user.dto.CreateUserDto;
+import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.model.User;
 
@@ -12,7 +13,11 @@ public interface UserMapper {
 
     User toUserFromUpdateDto(UpdateUserDto userDto);
 
+    User toUserFromReturnUserDto(ReturnUserDto userDto);
+
     CreateUserDto toCreateUserDto(User user);
 
     UpdateUserDto toUpdateUserDto(User user);
+
+    ReturnUserDto toReturnUserDto(User user);
 }
