@@ -8,8 +8,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ReturnUserDto {
     @NotNull(message = "id должен быть указан.")

@@ -4,8 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class UpdateItemDto {
     private String name;

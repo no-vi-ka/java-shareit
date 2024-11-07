@@ -7,8 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ItemWithCommentsDto {
         private Long id;

@@ -8,8 +8,6 @@ import ru.practicum.shareit.user.model.User;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoToReturn {
     private Integer id;
