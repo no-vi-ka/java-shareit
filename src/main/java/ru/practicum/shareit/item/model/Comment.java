@@ -20,10 +20,10 @@ public class Comment {
     private Integer id;
     @Column(name = "text", length = 512, nullable = false)
     private String text;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
     private Item item;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
     private User author;
     @Column(name = "created")
