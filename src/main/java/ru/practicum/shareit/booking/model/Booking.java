@@ -1,34 +1,34 @@
 package ru.practicum.shareit.booking.model;
 
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.status.Status;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@Entity
+@Table(name = "bookings")
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Booking {
-    @Positive(message = "Значение id должно быть положительным.")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull(message = "start должен быть указан.")
-    @FutureOrPresent(message = "start не может быть в прошлом.")
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime start;
-    @NotNull(message = "end должен быть указан.")
-    @Future(message = "end не может быть в прошлом.")
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
-    @NotNull(message = "item должен быть указан.")
-    @NotBlank(message = "item не должен быть пустым.")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
     private Item item;
-    @NotNull(message = "user должен быть указан.")
-    @NotBlank(message = "booker не должен быть пустым.")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booker_id", referencedColumnName = "id", nullable = false)
     private User booker;
-    @NotNull(message = "status должен быть указан.")
-    @NotBlank(message = "status не должен быть пустым.")
+    @Enumerated(EnumType.STRING)
     private Status status;
 }

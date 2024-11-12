@@ -1,24 +1,24 @@
 package ru.practicum.shareit.user.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Entity
 @Builder
+@Table(name = "users")
+@NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class User {
-    @Positive(message = "Значение id должно быть положительным.")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
-    @NotNull(message = "name должно быть указано.")
-    @NotBlank(message = "name не должно быть пустым.")
+    @Column(name = "name", nullable = false)
     private String name;
-    @NotNull(message = "email должен быть указан.")
-    @NotBlank(message = "email не должен быть пустым.")
-    @Email(message = "email должен быть указан корректно.")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 }
