@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.ReturnUserDto;
 
 @Getter
 @Setter
@@ -22,6 +22,6 @@ public class ItemDtoToReturn {
     private Boolean available;
     @NotNull(message = "owner должен быть указан.")
     @NotBlank(message = "owner не должен быть пустым.")
-    private User owner;
+    private ReturnUserDto owner;
     private ItemRequest request;
 }
