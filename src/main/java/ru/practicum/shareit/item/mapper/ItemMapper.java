@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import ru.practicum.shareit.item.dto.CreateItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoToReturn;
@@ -24,5 +25,6 @@ public interface ItemMapper {
 
     ItemWithCommentsDto toItemWithCommentsDtoFromItem(Item item);
 
+    @Mapping(target = "owner", source = "item.owner")
     ItemDtoToReturn toItemDtoToReturn(Item item);
 }

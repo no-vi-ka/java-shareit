@@ -112,10 +112,11 @@ public class ItemService {
         if (comment == null || comment.getText() == null) {
             throw new ValidationException("Comment could not be null or empty.");
         }
-        if (bookingRepository.findAllByBookerIdAndItemIdAndStatusAndEndBefore(userId, itemId, Status.APPROVED,
+        if (bookingRepository.findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(userId, itemId, Status.APPROVED,
                 LocalDateTime.now()).isEmpty()) {
             throw new ValidationException("User with id = " + userId + " did not book item with id = " + itemId);
         }
+
         comment.setAuthor(user);
         comment.setItem(item);
         comment.setCreated(LocalDateTime.now());

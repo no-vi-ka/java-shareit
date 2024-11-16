@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class ItemWithCommentsDto {
-        private Long id;
+        private Integer id;
         private String name;
         private String description;
         private boolean available;
