@@ -57,5 +57,5 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "AND b.status = :status")
     List<Booking> findAllByOwnerIdAndStatus(Integer ownerId, Status status);
 
-    List<Booking> findAllByBookerIdAndItemIdAndStatusAndEndBefore(Integer userId, Integer itemId, Status status, LocalDateTime now);
+    List<Booking> findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(Integer userId, Integer itemId, Status status, LocalDateTime now);
 }

@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.shareit.item.dto.ItemDtoToReturn;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.status.Status;
+import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -27,10 +29,10 @@ public class ReturnBookingDto {
     private LocalDateTime end;
     @NotNull(message = "item должен быть указан.")
     @NotBlank(message = "item не должен быть пустым.")
-    private Item item;
+    private ItemDtoToReturn item;
     @NotNull(message = "booker должен быть указан.")
     @NotBlank(message = "booker не должен быть пустым.")
-    private User booker;
+    private ReturnUserDto booker;
     @NotNull(message = "status должен быть указан.")
     @NotBlank(message = "status не должен быть пустым.")
     private Status status;

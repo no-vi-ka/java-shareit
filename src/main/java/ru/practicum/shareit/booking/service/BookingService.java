@@ -51,9 +51,7 @@ public class BookingService {
             throw new ItemIsNotAvailableException("Item with id = " + booking.getItem().getId()
                     + " already in use.");
         }
-        Item item = itemRepository.findById(booking.getItem().getId()).orElseThrow(
-                () -> new NotFoundException("Item with id = " + booking.getItem().getId() + " is not found."));
-        if (!userId.equals(item.getOwner().getId())) {
+        if (!booking.getItem().getOwner().getId().equals(userId)) {
             throw new ValidationException("User with id = " + userId
                     + " is not owner and can not set status for booking.");
         }
