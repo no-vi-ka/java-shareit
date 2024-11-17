@@ -11,9 +11,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class ReturnUserDto {
-    @NotNull(message = "id должен быть указан.")
-    @Positive(message = "id должен быть положительным.")
-    private Integer id;
+    private @NotNull(message = "id должен быть указан.")
+    @Positive(message = "id должен быть положительным.") Long id;
     @NotNull(message = "name должно быть указано.")
     @NotBlank(message = "name не должен быть пустым.")
     private String name;

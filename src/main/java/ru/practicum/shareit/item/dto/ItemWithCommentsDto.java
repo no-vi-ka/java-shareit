@@ -10,11 +10,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class ItemWithCommentsDto {
-        private Integer id;
-        private String name;
-        private String description;
-        private boolean available;
-        private List<CommentDto> comments;
-        private BookingDto lastBooking;
-        private BookingDto nextBooking;
+    private Long id;
+    private String name;
+    private String description;
+    private boolean available;
+    private Long requestId;
+    private List<CommentDto> comments;
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
 }

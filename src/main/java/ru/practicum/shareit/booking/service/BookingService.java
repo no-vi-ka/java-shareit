@@ -29,7 +29,7 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-    public ReturnBookingDto createBooking(@Valid BookingDto dtoBooking, Integer userId) {
+    public ReturnBookingDto createBooking(@Valid BookingDto dtoBooking, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " is not found."));
         Item item = itemRepository.findById(dtoBooking.getItemId()).orElseThrow(
@@ -44,7 +44,7 @@ public class BookingService {
         return bookingMapper.toReturnBookingDto(bookingRepository.save(created));
     }
 
-    public ReturnBookingDto setApprove(Integer bookingId, Boolean isApproved, Integer userId) {
+    public ReturnBookingDto setApprove(Long bookingId, Boolean isApproved, Long userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                 () -> new NotFoundException("Booking with id = " + bookingId + " is not found."));
         if (!booking.getStatus().equals(Status.WAITING)) {
@@ -63,7 +63,7 @@ public class BookingService {
         return bookingMapper.toReturnBookingDto(bookingRepository.save(booking));
     }
 
-    public ReturnBookingDto getBookingById(Integer bookingId, Integer userId) {
+    public ReturnBookingDto getBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                 () -> new EntityNotFoundException("Бронирование не найдено"));
         if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwner().getId().equals(userId)) {
@@ -74,7 +74,7 @@ public class BookingService {
     }
 
 
-    public List<ReturnBookingDto> getAllByBooker(String state, Integer bookerId) {
+    public List<ReturnBookingDto> getAllByBooker(String state, Long bookerId) {
         if (!userRepository.existsById(bookerId)) {
             throw new NotFoundException("User with id = " + bookerId + " is not found.");
         }
@@ -106,7 +106,7 @@ public class BookingService {
         };
     }
 
-    public List<ReturnBookingDto> getAllByOwner(String state, Integer ownerId) {
+    public List<ReturnBookingDto> getAllByOwner(String state, Long ownerId) {
         if (!userRepository.existsById(ownerId)) {
             throw new NotFoundException("User with id = " + ownerId + " is not found.");
         }

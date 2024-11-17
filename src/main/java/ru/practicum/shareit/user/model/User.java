@@ -11,12 +11,12 @@ import lombok.*;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "email", unique = true, nullable = false)

@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dto.ReturnUserDto;
 
 @Getter
@@ -11,7 +10,7 @@ import ru.practicum.shareit.user.dto.ReturnUserDto;
 @Builder
 @AllArgsConstructor
 public class ItemDtoToReturn {
-    private Integer id;
+    private Long id;
     @NotNull(message = "name должно быть указано.")
     @NotBlank(message = "name не должно быть пустым.")
     private String name;
@@ -23,5 +22,5 @@ public class ItemDtoToReturn {
     @NotNull(message = "owner должен быть указан.")
     @NotBlank(message = "owner не должен быть пустым.")
     private ReturnUserDto owner;
-    private ItemRequest request;
+    private Long requestId;
 }

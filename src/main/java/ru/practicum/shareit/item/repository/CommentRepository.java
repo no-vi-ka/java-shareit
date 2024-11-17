@@ -6,8 +6,8 @@ import ru.practicum.shareit.item.model.Comment;
 
 import java.util.List;
 
-public interface CommentRepository extends JpaRepository<Comment, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c " +
             "WHERE c.item.id = :itemId")
-    List<Comment> findAllByItemId(Integer itemId);
+    List<Comment> findAllByItemId(Long itemId);
 }

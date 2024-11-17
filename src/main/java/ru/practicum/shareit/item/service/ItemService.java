@@ -14,6 +14,8 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.status.Status;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -32,16 +34,23 @@ public class ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final ItemRequestRepository itemRequestRepository;
 
-    public ItemDtoToReturn createItem(CreateItemDto itemDto, Integer userId) {
+    public ItemDtoToReturn createItem(CreateItemDto itemDto, Long userId) {
         Item itemFromDto = itemMapper.toItemFromCreateDto(itemDto);
         itemFromDto.setOwner(userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " not found.")));
+        if (itemDto.getRequestId() != null) {
+            ItemRequest request = itemRequestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Запрос с id = "
+                            + itemDto.getRequestId() + " не найден."));
+            itemFromDto.setRequest(request);
+        }
         log.info("Item was created.");
         return itemMapper.toItemDtoToReturn(itemRepository.save(itemFromDto));
     }
 
-    public ItemDtoToReturn updateItem(UpdateItemDto itemDto, Integer userId, Integer itemId) {
+    public ItemDtoToReturn updateItem(UpdateItemDto itemDto, Long userId, Long itemId) {
         Item itemFromTable = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item with id = " + itemId + " not found."));
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id = " + userId + " is not found.");
@@ -65,7 +74,7 @@ public class ItemService {
         return itemMapper.toItemDtoToReturn(itemRepository.save(itemFromTable));
     }
 
-    public ItemWithCommentsDto getItemById(Integer itemId) {
+    public ItemWithCommentsDto getItemById(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item with id = " + itemId + " not found."));
         ItemWithCommentsDto itemWithCommentsDto = itemMapper.toItemWithCommentsDtoFromItem(item);
         List<CommentDto> commentDtoList = commentRepository.findAllByItemId(itemId).stream().map(commentMapper::toCommentDtoFromComment).toList();
@@ -74,11 +83,11 @@ public class ItemService {
         return itemWithCommentsDto;
     }
 
-    public List<ItemDtoToReturn> getItemsByUserId(Integer userId) {
+    public List<ItemDtoToReturn> getItemsByUserId(Long userId) {
         return itemRepository.findAllByOwnerId(userId).stream().map(itemMapper::toItemDtoToReturn).toList();
     }
 
-    public void deleteItem(Item item, Integer userId) {
+    public void deleteItem(Item item, Long userId) {
         if (!itemRepository.existsById(item.getId())) {
             throw new NotFoundException("Item with id = " + item.getId() + " not found.");
         }
@@ -89,7 +98,7 @@ public class ItemService {
         log.info("Delete Item with id = {}", item.getId());
     }
 
-    public List<ItemDtoToReturn> searchItems(Integer userId, String text) {
+    public List<ItemDtoToReturn> searchItems(Long userId, String text) {
         if (text.isEmpty() || text.isBlank()) {
             return Collections.emptyList();
         }
@@ -103,7 +112,7 @@ public class ItemService {
                 .toList();
     }
 
-    public CommentDto createComment(Integer userId, Integer itemId, CommentDto commentDto) {
+    public CommentDto createComment(Long userId, Long itemId, CommentDto commentDto) {
         Item item = itemRepository.findById(itemId).orElseThrow(
                 () -> new NotFoundException("Item with id = " + itemId + " not found."));
         User user = userRepository.findById(userId).orElseThrow(

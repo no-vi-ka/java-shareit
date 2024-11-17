@@ -29,7 +29,7 @@ public class UserService {
         return userMapper.toReturnUserDto(userRepository.save(createdUser));
     }
 
-    public ReturnUserDto updateUser(Integer id, UpdateUserDto dtoUser) {
+    public ReturnUserDto updateUser(Long id, UpdateUserDto dtoUser) {
         User userFromTable = userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User with id = " + id + " not found."));
         User userFromDto = userMapper.toUserFromUpdateDto(dtoUser);
@@ -44,7 +44,7 @@ public class UserService {
         return userMapper.toReturnUserDto(userRepository.save(userFromTable));
     }
 
-    public ReturnUserDto getUserById(Integer id) {
+    public ReturnUserDto getUserById(Long id) {
         return userMapper.toReturnUserDto(userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User with id = " + id + " not found.")));
     }
@@ -53,7 +53,7 @@ public class UserService {
         return userRepository.findAll().stream().map(userMapper::toReturnUserDto).toList();
     }
 
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("User with id = " + id + " not found.");
         }

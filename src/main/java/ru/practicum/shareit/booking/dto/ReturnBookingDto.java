@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class ReturnBookingDto {
-    @NotNull(message = "id должен быть указан.")
+    private @NotNull(message = "id должен быть указан.")
     @Positive(message = "id должен быть положительным.")
-    private Integer id;
+    Long id;
     @NotNull(message = "start должен быть указан.")
     @FutureOrPresent(message = "start не должен быть в прошлом.")
     private LocalDateTime start;

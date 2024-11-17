@@ -13,11 +13,5 @@ public interface UserMapper {
 
     User toUserFromUpdateDto(UpdateUserDto userDto);
 
-    User toUserFromReturnUserDto(ReturnUserDto userDto);
-
-    CreateUserDto toCreateUserDto(User user);
-
-    UpdateUserDto toUpdateUserDto(User user);
-
     ReturnUserDto toReturnUserDto(User user);
 }

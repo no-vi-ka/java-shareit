@@ -15,5 +15,5 @@ public class BookingDto {
     private LocalDateTime start;
     @Future(message = "end должен быть в будущем.")
     private LocalDateTime end;
-    private Integer itemId;
+    private Long itemId;
 }
