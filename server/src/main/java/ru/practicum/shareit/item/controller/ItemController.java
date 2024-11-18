@@ -45,7 +45,7 @@ public class ItemController {
     }
 
     @DeleteMapping
-    public void deleteItem(@RequestBody Item item,
+    public void deleteItem(@RequestBody ItemDtoToReturn item,
                            @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Пришёл запрос на удаление вещи с id: {} от пользователя с id: {}.", item.getId(), userId);
         itemService.deleteItem(item, userId);

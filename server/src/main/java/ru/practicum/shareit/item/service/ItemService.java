@@ -86,7 +86,7 @@ public class ItemService {
         return itemRepository.findAllByOwnerId(userId).stream().map(itemMapper::toItemDtoToReturn).toList();
     }
 
-    public void deleteItem(Item item, Long userId) {
+    public void deleteItem(ItemDtoToReturn item, Long userId) {
         if (!itemRepository.existsById(item.getId())) {
             throw new NotFoundException("Item with id = " + item.getId() + " not found.");
         }
@@ -117,9 +117,6 @@ public class ItemService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " not found."));
         Comment comment = commentMapper.toCommentFromCommentDto(commentDto);
-//        if (comment == null || comment.getText() == null) {
-//            throw new ValidationException("Comment could not be null or empty.");
-//        }
         if (bookingRepository.findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(userId, itemId, Status.APPROVED,
                 LocalDateTime.now()).isEmpty()) {
             throw new NotOwnerException("User with id = " + userId + " did not book item with id = " + itemId);
