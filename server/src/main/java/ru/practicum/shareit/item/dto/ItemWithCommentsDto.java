@@ -8,12 +8,13 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ItemWithCommentsDto {
     private Long id;
     private String name;
     private String description;
-    private boolean available;
+    private Boolean available;
     private Long requestId;
     private List<CommentDto> comments;
     private BookingDto lastBooking;

@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.dto.ReturnUserDto;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoToReturn {
     private Long id;

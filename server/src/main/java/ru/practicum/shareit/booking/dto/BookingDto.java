@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class BookingDto {
     private LocalDateTime start;

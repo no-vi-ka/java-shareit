@@ -1,10 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.shareit.item.dto.ItemDtoToReturn;
 import ru.practicum.shareit.user.dto.ReturnUserDto;
 
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ReturnBookingDto {
     private @NotNull(message = "id должен быть указан.")
