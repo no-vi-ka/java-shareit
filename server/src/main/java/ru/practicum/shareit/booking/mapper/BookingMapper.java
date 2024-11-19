@@ -10,9 +10,5 @@ import ru.practicum.shareit.booking.model.Booking;
 public interface BookingMapper {
     Booking toBookingFromBookingDto(BookingDto bookingDto);
 
-    Booking toBookingFromReturnBookingDto(ReturnBookingDto bookingDto);
-
-    BookingDto toBookingDtoFromBooking(Booking booking);
-
     ReturnBookingDto toReturnBookingDto(Booking booking);
 }
