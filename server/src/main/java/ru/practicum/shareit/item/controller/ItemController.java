@@ -43,11 +43,11 @@ public class ItemController {
         return itemService.getItemsByUserId(userId);
     }
 
-    @DeleteMapping
-    public void deleteItem(@RequestBody ItemDtoToReturn item,
+    @DeleteMapping("/{item-id}")
+    public void deleteItem(@PathVariable("item-id") Long id,
                            @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("Пришёл запрос на удаление вещи с id: {} от пользователя с id: {}.", item.getId(), userId);
-        itemService.deleteItem(item, userId);
+        log.info("Пришёл запрос на удаление вещи с id: {} от пользователя с id: {}.", id, userId);
+        itemService.deleteItem(id, userId);
     }
 
     @GetMapping("/search")

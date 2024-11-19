@@ -151,34 +151,6 @@ public class ItemServiceTest {
         assertEquals(findedWithEmptyText.size(), 0);
     }
 
-//    @Test
-//    void createCommentTest() {
-//        CreateUserDto createUserDto1 = createUserDto(7L);
-//        ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-//        CreateItemDto createItemDto1 = createItemDto(8L);
-//        ItemDtoToReturn itemDtoToReturn1 = itemService.createItem(createItemDto1, returnUserDto1.getId());
-//        CreateUserDto createUserDto2 = createUserDto(8L);
-//        ReturnUserDto returnUserDto2 = userService.createUser(createUserDto2);
-//
-//        BookingDto bookingDto = BookingDto.builder()
-//                .itemId(itemDtoToReturn1.getId())
-//                .start(LocalDateTime.of(2025, 11, 18, 20, 20, 20))
-//                .end(LocalDateTime.of(2025, 11, 18, 20, 20, 21)).build();
-//
-//        ReturnBookingDto returnBookingDto = bookingService.createBooking(bookingDto, returnUserDto2.getId());
-//        bookingService.setApprove(returnBookingDto.getId(), true, returnUserDto1.getId());
-//
-//        CommentDto commentDto = CommentDto.builder()
-//                .text("Text.")
-//                .build();
-//
-//        CommentDto created = itemService.createComment(returnUserDto1.getId(), itemDtoToReturn1.getId(), commentDto);
-//
-//        assertEquals(created.getText(), commentDto.getText());
-//        assertEquals(created.getAuthorName(), returnUserDto1.getName());
-//    }
-
-
     @Test
     void shouldThrownExceptions() {
         String text = "text";
@@ -201,7 +173,7 @@ public class ItemServiceTest {
         CreateItemDto createItemDto3 = createItemDto(10L);
         ItemDtoToReturn itemDtoToReturn3 = itemService.createItem(createItemDto3, returnUserDto2.getId());
 
-        assertThrows(NotOwnerException.class, () -> itemService.deleteItem(itemDtoToReturn2, returnUserDto2.getId()));
+        assertThrows(NotOwnerException.class, () -> itemService.deleteItem(itemDtoToReturn2.getId(), returnUserDto2.getId()));
 
         UpdateItemDto updateItemDto = updateItemDto(3L);
 
@@ -218,10 +190,10 @@ public class ItemServiceTest {
         assertThrows(NotOwnerException.class, () -> itemService.createComment(
                 returnUserDto3.getId(), itemDtoToReturn3.getId(), commentDto));
 
-        itemService.deleteItem(itemDtoToReturn3, returnUserDto2.getId());
+        itemService.deleteItem(itemDtoToReturn3.getId(), returnUserDto2.getId());
 
         assertThrows(NotFoundException.class, () -> itemService.getItemById(itemDtoToReturn3.getId()));
-        assertThrows(NotFoundException.class, () -> itemService.deleteItem(itemDtoToReturn3, returnUserDto2.getId()));
+        assertThrows(NotFoundException.class, () -> itemService.deleteItem(itemDtoToReturn3.getId(), returnUserDto2.getId()));
         assertThrows(NotFoundException.class, () -> itemService.createComment(
                 returnUserDto2.getId(), itemDtoToReturn3.getId(), commentDto));
     }

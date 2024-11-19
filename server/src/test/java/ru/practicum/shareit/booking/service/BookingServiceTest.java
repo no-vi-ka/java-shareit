@@ -102,7 +102,7 @@ public class BookingServiceTest {
                 .end(end)
                 .itemId(itemDtoToReturn2.getId())
                 .build();
-        itemService.deleteItem(itemDtoToReturn2, returnUserDto1.getId());
+        itemService.deleteItem(itemDtoToReturn2.getId(), returnUserDto1.getId());
         BookingDto bookingDtoNotAvailable = BookingDto.builder()
                 .start(start)
                 .end(end)
@@ -111,7 +111,8 @@ public class BookingServiceTest {
 
         assertThrows(NotFoundException.class, () -> bookingService.createBooking(bookingDto, returnUserDto3.getId()));
         assertThrows(NotFoundException.class, () -> bookingService.createBooking(bookingDto2, returnUserDto2.getId()));
-        assertThrows(ItemIsNotAvailableException.class, () -> bookingService.createBooking(bookingDtoNotAvailable, returnUserDto2.getId()));
+        assertThrows(ItemIsNotAvailableException.class, () -> bookingService.createBooking(
+                bookingDtoNotAvailable, returnUserDto2.getId()));
 
         ReturnBookingDto returnBookingDto = bookingService.createBooking(bookingDto, returnUserDto2.getId());
 
@@ -146,18 +147,23 @@ public class BookingServiceTest {
                 .build();
         ReturnBookingDto returnBookingDto2 = bookingService.createBooking(bookingDto2, returnUserDto2.getId());
 
-        assertThrows(NotFoundException.class, () -> bookingService.setApprove(100L, true, returnUserDto1.getId()));
-        assertThrows(ValidationException.class, () -> bookingService.setApprove(returnBookingDto.getId(), false, returnUserDto2.getId()));
+        assertThrows(NotFoundException.class, () -> bookingService.setApprove(
+                100L, true, returnUserDto1.getId()));
+        assertThrows(ValidationException.class, () -> bookingService.setApprove(
+                returnBookingDto.getId(), false, returnUserDto2.getId()));
 
-        ReturnBookingDto notApproved = bookingService.setApprove(returnBookingDto.getId(), false, returnUserDto1.getId());
+        ReturnBookingDto notApproved = bookingService.setApprove(
+                returnBookingDto.getId(), false, returnUserDto1.getId());
 
         assertEquals(notApproved.getStatus(), Status.REJECTED);
 
-        ReturnBookingDto approved = bookingService.setApprove(returnBookingDto2.getId(), true, returnUserDto1.getId());
+        ReturnBookingDto approved = bookingService.setApprove(
+                returnBookingDto2.getId(), true, returnUserDto1.getId());
 
         assertEquals(approved.getStatus(), Status.APPROVED);
 
-        assertThrows(ItemIsNotAvailableException.class, () -> bookingService.setApprove(returnBookingDto2.getId(), true, returnUserDto1.getId()));
+        assertThrows(ItemIsNotAvailableException.class, () -> bookingService.setApprove(
+                returnBookingDto2.getId(), true, returnUserDto1.getId()));
     }
 
     @Test
@@ -188,8 +194,10 @@ public class BookingServiceTest {
         ReturnBookingDto finded = bookingService.getBookingById(returnBookingDto.getId(), returnUserDto1.getId());
 
         assertEquals(finded.getId(), returnBookingDto.getId());
-        assertThrows(EntityNotFoundException.class, () -> bookingService.getBookingById(100L, returnUserDto1.getId()));
-        assertThrows(ValidationException.class, () -> bookingService.getBookingById(returnBookingDto.getId(), 100L));
+        assertThrows(EntityNotFoundException.class, () -> bookingService.getBookingById(
+                100L, returnUserDto1.getId()));
+        assertThrows(ValidationException.class, () -> bookingService.getBookingById(
+                returnBookingDto.getId(), 100L));
     }
 
     @Test

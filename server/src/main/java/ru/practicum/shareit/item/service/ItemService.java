@@ -50,7 +50,8 @@ public class ItemService {
     }
 
     public ItemDtoToReturn updateItem(UpdateItemDto itemDto, Long userId, Long itemId) {
-        Item itemFromTable = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item with id = " + itemId + " not found."));
+        Item itemFromTable = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException(
+                "Item with id = " + itemId + " not found."));
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id = " + userId + " is not found.");
         }
@@ -74,9 +75,11 @@ public class ItemService {
     }
 
     public ItemWithCommentsDto getItemById(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item with id = " + itemId + " not found."));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException(
+                "Item with id = " + itemId + " not found."));
         ItemWithCommentsDto itemWithCommentsDto = itemMapper.toItemWithCommentsDtoFromItem(item);
-        List<CommentDto> commentDtoList = commentRepository.findAllByItemId(itemId).stream().map(commentMapper::toCommentDtoFromComment).toList();
+        List<CommentDto> commentDtoList = commentRepository.findAllByItemId(itemId).stream()
+                .map(commentMapper::toCommentDtoFromComment).toList();
         itemWithCommentsDto.setComments(commentDtoList);
         log.info("Get Item with comments with id = {}", itemId);
         return itemWithCommentsDto;
@@ -86,10 +89,9 @@ public class ItemService {
         return itemRepository.findAllByOwnerId(userId).stream().map(itemMapper::toItemDtoToReturn).toList();
     }
 
-    public void deleteItem(ItemDtoToReturn item, Long userId) {
-        if (!itemRepository.existsById(item.getId())) {
-            throw new NotFoundException("Item with id = " + item.getId() + " not found.");
-        }
+    public void deleteItem(Long id, Long userId) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new NotFoundException(
+                "Item with id = " + id + " not found."));
         if (!item.getOwner().getId().equals(userId)) {
             throw new NotOwnerException("User with id = " + userId + " is not owner for this item.");
         }
