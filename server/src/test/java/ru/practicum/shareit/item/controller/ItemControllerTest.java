@@ -45,8 +45,8 @@ public class ItemControllerTest {
                 .description("Description" + i)
                 .available(true)
                 .owner(new ReturnUserDto())
-                .requestId(i).
-                build();
+                .requestId(i)
+                .build();
     }
 
     private ItemWithCommentsDto returnItemWithCommentsDto(Long i) {
@@ -165,7 +165,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    void getItemListBySearch_shouldReturnItemDtoList() throws Exception {
+    void searchItemsTest() throws Exception {
         List<ItemDtoToReturn> itemDtoToReturnList = List.of(returnItemDto(1L),
                 returnItemDto(2L));
 
@@ -187,7 +187,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    void addComment_shouldReturnCommentDto() throws Exception {
+    void createCommentTest() throws Exception {
         CommentDto commentDto = getCommentDto(1L);
 
         when(itemService.createComment(any(), any(), any()))

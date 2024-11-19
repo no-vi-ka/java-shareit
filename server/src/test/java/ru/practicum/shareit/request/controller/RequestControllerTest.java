@@ -46,7 +46,7 @@ public class RequestControllerTest {
     }
 
     @Test
-    void addItemRequestTest() throws Exception {
+    void createItemRequestTest() throws Exception {
         ItemRequestDto itemRequestDto = getItemRequestDto(1L);
 
         when(itemRequestService.createItemRequest(any(), any()))

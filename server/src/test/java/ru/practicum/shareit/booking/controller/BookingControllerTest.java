@@ -115,8 +115,9 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$.start", Matchers.containsString(returnBookingDto.getStart().toString().substring(0, 24))))
                 .andExpect(jsonPath("$.end", Matchers.containsString(returnBookingDto.getEnd().toString().substring(0, 24))));
     }
+
     @Test
-    void getBookingListByBookerAndState_shouldReturnBookingList() throws Exception {
+    void getBookingsTest() throws Exception {
         List<ReturnBookingDto> responseBookingDtoList = List.of(returnBookingDto(1L), returnBookingDto(2L));
 
         when(bookingService.getBookings(any(), any()))
