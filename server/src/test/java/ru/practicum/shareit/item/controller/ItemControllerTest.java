@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,6 +92,9 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.available", Matchers.is(itemDtoToReturn.getAvailable())))
                 .andExpect(jsonPath("$.owner", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.requestId", Matchers.is(itemDtoToReturn.getRequestId()), Long.class));
+
+        verify(itemService, times(1))
+                .createItem(any(), any());
     }
 
     @Test
@@ -115,6 +118,9 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.available", Matchers.is(itemDto.getAvailable())))
                 .andExpect(jsonPath("$.owner", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.requestId", Matchers.is(itemDto.getRequestId()), Long.class));
+
+        verify(itemService, times(1))
+                .updateItem(any(), any(), any());
     }
 
     @Test
@@ -139,6 +145,9 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.lastBooking", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.nextBooking", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.comments", Matchers.notNullValue()));
+
+        verify(itemService, times(1))
+                .getItemById(any());
     }
 
     @Test
@@ -158,10 +167,15 @@ public class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", Matchers.is(itemDtoToReturnList.get(0).getId()), Long.class))
                 .andExpect(jsonPath("$[0].name", Matchers.is(itemDtoToReturnList.get(0).getName())))
-                .andExpect(jsonPath("$[0].description", Matchers.is(itemDtoToReturnList.get(0).getDescription())))
+                .andExpect(jsonPath("$[0].description", Matchers.is(
+                        itemDtoToReturnList.get(0).getDescription())))
                 .andExpect(jsonPath("$[1].id", Matchers.is(itemDtoToReturnList.get(1).getId()), Long.class))
                 .andExpect(jsonPath("$[1].name", Matchers.is(itemDtoToReturnList.get(1).getName())))
-                .andExpect(jsonPath("$[1].description", Matchers.is(itemDtoToReturnList.get(1).getDescription())));
+                .andExpect(jsonPath("$[1].description", Matchers.is(
+                        itemDtoToReturnList.get(1).getDescription())));
+
+        verify(itemService, times(1))
+                .getItemsByUserId(any());
     }
 
     @Test
@@ -180,10 +194,15 @@ public class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", Matchers.is(itemDtoToReturnList.get(0).getId()), Long.class))
                 .andExpect(jsonPath("$[0].name", Matchers.is(itemDtoToReturnList.get(0).getName())))
-                .andExpect(jsonPath("$[0].description", Matchers.is(itemDtoToReturnList.get(0).getDescription())))
+                .andExpect(jsonPath("$[0].description", Matchers.is(
+                        itemDtoToReturnList.get(0).getDescription())))
                 .andExpect(jsonPath("$[1].id", Matchers.is(itemDtoToReturnList.get(1).getId()), Long.class))
                 .andExpect(jsonPath("$[1].name", Matchers.is(itemDtoToReturnList.get(1).getName())))
-                .andExpect(jsonPath("$[1].description", Matchers.is(itemDtoToReturnList.get(1).getDescription())));
+                .andExpect(jsonPath("$[1].description", Matchers.is(
+                        itemDtoToReturnList.get(1).getDescription())));
+
+        verify(itemService, times(1))
+                .searchItems(any(), any());
     }
 
     @Test
@@ -204,6 +223,23 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(commentDto.getId()), Long.class))
                 .andExpect(jsonPath("$.text", Matchers.is(commentDto.getText())))
                 .andExpect(jsonPath("$.authorName", Matchers.is(commentDto.getAuthorName())))
-                .andExpect(jsonPath("$.created", Matchers.containsString(commentDto.getCreated().toString().substring(0, 25))));
+                .andExpect(jsonPath("$.created", Matchers.containsString(
+                        commentDto.getCreated().toString().substring(0, 25))));
+
+        verify(itemService, times(1))
+                .createComment(any(), any(), any());
+    }
+
+    @Test
+    void deleteItemTest() throws Exception {
+        mockMvc.perform(delete("/items/1")
+                        .header("X-Sharer-User-Id", 1L)
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(itemService, times(1))
+                .deleteItem(any(), any());
     }
 }

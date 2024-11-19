@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,8 +63,12 @@ public class RequestControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(itemRequestDto.getId()), Long.class))
                 .andExpect(jsonPath("$.description", Matchers.is(itemRequestDto.getDescription())))
                 .andExpect(jsonPath("$.requestor", Matchers.notNullValue()))
-                .andExpect(jsonPath("$.created", Matchers.containsString(itemRequestDto.getCreated().toString().substring(0, 24))))
+                .andExpect(jsonPath("$.created", Matchers.containsString(
+                        itemRequestDto.getCreated().toString().substring(0, 24))))
                 .andExpect(jsonPath("$.items", Matchers.notNullValue()));
+
+        verify(itemRequestService, times(1))
+                .createItemRequest(any(), any());
     }
 
     @Test
@@ -86,6 +90,9 @@ public class RequestControllerTest {
                 .andExpect(jsonPath("$.requestor", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.created", Matchers.containsString(itemRequestDto.getCreated().toString().substring(0, 24))))
                 .andExpect(jsonPath("$.items", Matchers.notNullValue()));
+
+        verify(itemRequestService, times(1))
+                .getItemRequestById(any(), any());
     }
 
     @Test
@@ -110,6 +117,9 @@ public class RequestControllerTest {
                 .andExpect(jsonPath("$[1].description", Matchers.is(itemRequestDtoList.get(1).getDescription())))
                 .andExpect(jsonPath("$[1].requestor", Matchers.notNullValue()))
                 .andExpect(jsonPath("$[1].items", Matchers.notNullValue()));
+
+        verify(itemRequestService, times(1))
+                .getAllItemRequestForRequestor(any());
     }
 
     @Test
@@ -134,5 +144,8 @@ public class RequestControllerTest {
                 .andExpect(jsonPath("$[1].description", Matchers.is(itemRequestDtoList.get(1).getDescription())))
                 .andExpect(jsonPath("$[1].requestor", Matchers.notNullValue()))
                 .andExpect(jsonPath("$[1].items", Matchers.notNullValue()));
+
+        verify(itemRequestService, times(1))
+                .getAllItemRequest(any());
     }
 }

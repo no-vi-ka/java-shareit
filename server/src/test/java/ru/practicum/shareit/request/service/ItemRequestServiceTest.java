@@ -53,9 +53,9 @@ public class ItemRequestServiceTest {
 
     @Test
     void getItemRequestByIdTest() {
-        CreateUserDto createUserDto1 = createUserDto(2L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateItemRequestDto createItemRequestDto = createItemRequestDto(2L);
+        CreateItemRequestDto createItemRequestDto = createItemRequestDto(1L);
         ItemRequestDto itemRequestDto = itemRequestService.createItemRequest(
                 returnUserDto1.getId(), createItemRequestDto);
 
@@ -70,12 +70,12 @@ public class ItemRequestServiceTest {
 
     @Test
     void getItemRequestsByRequestorIdTest() {
-        CreateUserDto createUserDto1 = createUserDto(2L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateItemRequestDto createItemRequestDto1 = createItemRequestDto(3L);
+        CreateItemRequestDto createItemRequestDto1 = createItemRequestDto(1L);
         ItemRequestDto itemRequestDto1 = itemRequestService.createItemRequest(
                 returnUserDto1.getId(), createItemRequestDto1);
-        CreateItemRequestDto createItemRequestDto2 = createItemRequestDto(4L);
+        CreateItemRequestDto createItemRequestDto2 = createItemRequestDto(2L);
         ItemRequestDto itemRequestDto2 = itemRequestService.createItemRequest(
                 returnUserDto1.getId(), createItemRequestDto2);
 
@@ -88,14 +88,14 @@ public class ItemRequestServiceTest {
 
     @Test
     void getAllItemRequestTest() {
-        CreateUserDto createUserDto1 = createUserDto(3L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateUserDto createUserDto2 = createUserDto(4L);
+        CreateUserDto createUserDto2 = createUserDto(2L);
         ReturnUserDto returnUserDto2 = userService.createUser(createUserDto2);
-        CreateItemRequestDto createItemRequestDto1 = createItemRequestDto(5L);
+        CreateItemRequestDto createItemRequestDto1 = createItemRequestDto(1L);
         ItemRequestDto itemRequestDto1 = itemRequestService.createItemRequest(
                 returnUserDto1.getId(), createItemRequestDto1);
-        CreateItemRequestDto createItemRequestDto2 = createItemRequestDto(6L);
+        CreateItemRequestDto createItemRequestDto2 = createItemRequestDto(2L);
         ItemRequestDto itemRequestDto2 = itemRequestService.createItemRequest(
                 returnUserDto2.getId(), createItemRequestDto2);
 
@@ -110,17 +110,17 @@ public class ItemRequestServiceTest {
 
     @Test
     void shouldThrownNotFoundException() {
-        CreateUserDto createUserDto1 = createUserDto(5L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
 
         assertThrows(NotFoundException.class, () -> itemRequestService.getItemRequestById(
                 returnUserDto1.getId(), 100L));
 
-        CreateItemRequestDto createItemRequestDto1 = createItemRequestDto(7L);
+        CreateItemRequestDto createItemRequestDto1 = createItemRequestDto(1L);
         ItemRequestDto itemRequestDto1 = itemRequestService.createItemRequest(
                 returnUserDto1.getId(), createItemRequestDto1);
         userService.deleteUser(returnUserDto1.getId());
-        CreateItemRequestDto createItemRequestDto2 = createItemRequestDto(8L);
+        CreateItemRequestDto createItemRequestDto2 = createItemRequestDto(2L);
 
         assertThrows(NotFoundException.class, () -> itemRequestService.createItemRequest(
                 returnUserDto1.getId(), createItemRequestDto2));

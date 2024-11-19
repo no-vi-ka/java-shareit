@@ -175,7 +175,7 @@ public class BookingServiceTest {
 
         CreateItemDto createItemDto1 = createItemDto(1L);
         ItemDtoToReturn itemDtoToReturn1 = itemService.createItem(createItemDto1, returnUserDto1.getId());
-        CreateItemDto createItemDto2 = createItemDto(1L);
+        CreateItemDto createItemDto2 = createItemDto(2L);
         ItemDtoToReturn itemDtoToReturn2 = itemService.createItem(createItemDto2, returnUserDto1.getId());
 
         BookingDto bookingDto = BookingDto.builder()

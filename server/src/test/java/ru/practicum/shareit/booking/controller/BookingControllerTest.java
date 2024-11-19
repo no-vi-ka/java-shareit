@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,6 +69,9 @@ public class BookingControllerTest {
                         returnBookingDto.getStart().toString().substring(0, 24))))
                 .andExpect(jsonPath("$.end", Matchers.containsString(
                         returnBookingDto.getEnd().toString().substring(0, 24))));
+
+        verify(bookingService, times(1))
+                .createBooking(any(), any());
     }
 
     @Test
@@ -90,8 +93,13 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$.item", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.booker", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.status", Matchers.is(returnBookingDto.getStatus().name())))
-                .andExpect(jsonPath("$.start", Matchers.containsString(returnBookingDto.getStart().toString().substring(0, 24))))
-                .andExpect(jsonPath("$.end", Matchers.containsString(returnBookingDto.getEnd().toString().substring(0, 24))));
+                .andExpect(jsonPath("$.start", Matchers.containsString(
+                        returnBookingDto.getStart().toString().substring(0, 24))))
+                .andExpect(jsonPath("$.end", Matchers.containsString(
+                        returnBookingDto.getEnd().toString().substring(0, 24))));
+
+        verify(bookingService, times(1))
+                .setApprove(any(), any(), any());
     }
 
     @Test
@@ -112,8 +120,13 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$.item", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.booker", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.status", Matchers.is(returnBookingDto.getStatus().name())))
-                .andExpect(jsonPath("$.start", Matchers.containsString(returnBookingDto.getStart().toString().substring(0, 24))))
-                .andExpect(jsonPath("$.end", Matchers.containsString(returnBookingDto.getEnd().toString().substring(0, 24))));
+                .andExpect(jsonPath("$.start", Matchers.containsString(
+                        returnBookingDto.getStart().toString().substring(0, 24))))
+                .andExpect(jsonPath("$.end", Matchers.containsString(
+                        returnBookingDto.getEnd().toString().substring(0, 24))));
+
+        verify(bookingService, times(1))
+                .getBookingById(any(), any());
     }
 
     @Test
@@ -130,12 +143,17 @@ public class BookingControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", Matchers.is(responseBookingDtoList.get(0).getId()), Long.class))
-                .andExpect(jsonPath("$[1].id", Matchers.is(responseBookingDtoList.get(1).getId()), Long.class));
+                .andExpect(jsonPath("$[0].id", Matchers.is(
+                        responseBookingDtoList.get(0).getId()), Long.class))
+                .andExpect(jsonPath("$[1].id", Matchers.is(
+                        responseBookingDtoList.get(1).getId()), Long.class));
+
+        verify(bookingService, times(1))
+                .getBookings(any(), any());
     }
 
     @Test
-    void getBookingListByOwnerAndState_shouldReturnBookingList() throws Exception {
+    void getAllByOwnerTest() throws Exception {
         List<ReturnBookingDto> returnBookingDtoList = List.of(returnBookingDto(1L), returnBookingDto(2L));
 
         when(bookingService.getAllByOwner(any(), any()))
@@ -150,5 +168,8 @@ public class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", Matchers.is(returnBookingDtoList.get(0).getId()), Long.class))
                 .andExpect(jsonPath("$[1].id", Matchers.is(returnBookingDtoList.get(1).getId()), Long.class));
+
+        verify(bookingService, times(1))
+                .getAllByOwner(any(), any());
     }
 }

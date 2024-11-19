@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,6 +57,9 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(returnUserDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", Matchers.is(returnUserDto.getName())))
                 .andExpect(jsonPath("$.email", Matchers.is(returnUserDto.getEmail())));
+
+        verify(userService, times(1))
+                .createUser(any());
     }
 
     @Test
@@ -76,6 +79,9 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(returnUserDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", Matchers.is(returnUserDto.getName())))
                 .andExpect(jsonPath("$.email", Matchers.is(returnUserDto.getEmail())));
+
+        verify(userService, times(1))
+                .updateUser(any(), any());
     }
 
     @Test
@@ -94,6 +100,9 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].id", Matchers.is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$[0].name", Matchers.is(userDto.getName())))
                 .andExpect(jsonPath("$[0].email", Matchers.is(userDto.getEmail())));
+
+        verify(userService, times(1))
+                .getUsers();
     }
 
     @Test
@@ -112,6 +121,9 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(returnUserDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", Matchers.is(returnUserDto.getName())))
                 .andExpect(jsonPath("$.email", Matchers.is(returnUserDto.getEmail())));
+
+        verify(userService, times(1))
+                .getUserById(any());
     }
 
     @Test
@@ -122,5 +134,8 @@ public class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk());
+
+        verify(userService, times(1))
+                .deleteUser(any());
     }
 }

@@ -50,9 +50,9 @@ public class UserServiceTest {
 
     @Test
     void updateUserTest() {
-        CreateUserDto createUserDto = createUserDto(2L);
+        CreateUserDto createUserDto = createUserDto(1L);
         ReturnUserDto returnCreatedUserDto = userService.createUser(createUserDto);
-        UpdateUserDto updateUserDto = updateUserDto(3L);
+        UpdateUserDto updateUserDto = updateUserDto(2L);
         ReturnUserDto returnUpdatedUserDto = userService.updateUser(returnCreatedUserDto.getId(), updateUserDto);
 
         assertEquals(updateUserDto.getName(), returnUpdatedUserDto.getName());
@@ -62,7 +62,7 @@ public class UserServiceTest {
 
     @Test
     void getUserByIdTest() {
-        CreateUserDto createUserDto = createUserDto(4L);
+        CreateUserDto createUserDto = createUserDto(1L);
         ReturnUserDto returnCreatedUserDto = userService.createUser(createUserDto);
         ReturnUserDto returnFindedUserDto = userService.getUserById(returnCreatedUserDto.getId());
 
@@ -73,9 +73,9 @@ public class UserServiceTest {
 
     @Test
     void getUsersTest() {
-        CreateUserDto createUserDto1 = createUserDto(5L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnCreatedUserDto1 = userService.createUser(createUserDto1);
-        CreateUserDto createUserDto2 = createUserDto(6L);
+        CreateUserDto createUserDto2 = createUserDto(2L);
         ReturnUserDto returnCreatedUserDto2 = userService.createUser(createUserDto2);
         List<ReturnUserDto> allUsers = userService.getUsers();
 
@@ -86,11 +86,11 @@ public class UserServiceTest {
 
     @Test
     void deleteUserTest() {
-        CreateUserDto createUserDto1 = createUserDto(7L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         userService.createUser(createUserDto1);
-        CreateUserDto createUserDto2 = createUserDto(8L);
+        CreateUserDto createUserDto2 = createUserDto(2L);
         ReturnUserDto returnCreatedUserDto2 = userService.createUser(createUserDto2);
-        CreateUserDto createUserDto3 = createUserDto(9L);
+        CreateUserDto createUserDto3 = createUserDto(3L);
         ReturnUserDto returnCreatedUserDto3 = userService.createUser(createUserDto3);
         userService.deleteUser(returnCreatedUserDto3.getId());
         List<ReturnUserDto> allUsers = userService.getUsers();
@@ -129,10 +129,10 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowNotFoundException() {
-        CreateUserDto createUserDto1 = createUserDto(11L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnCreatedUserDto1 = userService.createUser(createUserDto1);
         userService.deleteUser(returnCreatedUserDto1.getId());
-        UpdateUserDto updateUserDto = updateUserDto(1L);
+        UpdateUserDto updateUserDto = updateUserDto(2L);
 
         assertThrows(NotFoundException.class, () -> userService.deleteUser(returnCreatedUserDto1.getId()));
         assertThrows(NotFoundException.class, () -> userService.getUserById(returnCreatedUserDto1.getId()));

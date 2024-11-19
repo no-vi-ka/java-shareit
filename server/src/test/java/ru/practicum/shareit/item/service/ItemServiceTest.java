@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.ReturnBookingDto;
+import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
 import ru.practicum.shareit.item.dto.*;
@@ -16,6 +19,7 @@ import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class ItemServiceTest {
     private final ItemRequestService itemRequestService;
     private final UserService userService;
     private final ItemService itemService;
+    private final BookingService bookingService;
 
     private CreateItemDto createItemDto(Long i) {
         return CreateItemDto.builder()
@@ -79,7 +84,6 @@ public class ItemServiceTest {
 
         assertEquals(itemDtoToReturn2.getRequestId(), itemRequestDto.getId());
 
-
         assertEquals(itemDtoToReturn.getName(), createItemDto.getName());
         assertEquals(itemDtoToReturn.getDescription(), createItemDto.getDescription());
         assertEquals(itemDtoToReturn.getAvailable(), createItemDto.getAvailable());
@@ -89,11 +93,11 @@ public class ItemServiceTest {
 
     @Test
     void updateItemTest() {
-        CreateUserDto createUserDto1 = createUserDto(2L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateItemDto createItemDto = createItemDto(2L);
+        CreateItemDto createItemDto = createItemDto(1L);
         ItemDtoToReturn itemDtoToReturn = itemService.createItem(createItemDto, returnUserDto1.getId());
-        UpdateItemDto updateItemDto = updateItemDto(3L);
+        UpdateItemDto updateItemDto = updateItemDto(2L);
         ItemDtoToReturn updated = itemService.updateItem(
                 updateItemDto, returnUserDto1.getId(), itemDtoToReturn.getId());
 
@@ -104,9 +108,9 @@ public class ItemServiceTest {
 
     @Test
     void getItemByIdTest() {
-        CreateUserDto createUserDto1 = createUserDto(3L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateItemDto createItemDto = createItemDto(3L);
+        CreateItemDto createItemDto = createItemDto(1L);
         ItemDtoToReturn itemDtoToReturn = itemService.createItem(createItemDto, returnUserDto1.getId());
 
         ItemWithCommentsDto finded = itemService.getItemById(itemDtoToReturn.getId());
@@ -120,13 +124,11 @@ public class ItemServiceTest {
 
     @Test
     void getItemsByUserIdTest() {
-        CreateUserDto createUserDto1 = createUserDto(4L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateUserDto createUserDto2 = createUserDto(5L);
-        ReturnUserDto returnUserDto2 = userService.createUser(createUserDto2);
-        CreateItemDto createItemDto1 = createItemDto(4L);
+        CreateItemDto createItemDto1 = createItemDto(1L);
         ItemDtoToReturn itemDtoToReturn1 = itemService.createItem(createItemDto1, returnUserDto1.getId());
-        CreateItemDto createItemDto2 = createItemDto(5L);
+        CreateItemDto createItemDto2 = createItemDto(2L);
         ItemDtoToReturn itemDtoToReturn2 = itemService.createItem(createItemDto2, returnUserDto1.getId());
 
         List<ItemDtoToReturn> finded = itemService.getItemsByUserId(returnUserDto1.getId());
@@ -140,11 +142,11 @@ public class ItemServiceTest {
     void searchItemsTest() {
         String text = "text";
         String emptyText = "";
-        CreateUserDto createUserDto1 = createUserDto(6L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
-        CreateItemDto createItemDto1 = createItemDto(6L);
+        CreateItemDto createItemDto1 = createItemDto(1L);
         ItemDtoToReturn itemDtoToReturn1 = itemService.createItem(createItemDto1, returnUserDto1.getId());
-        CreateItemDto createItemDto2 = createItemDto(7L);
+        CreateItemDto createItemDto2 = createItemDto(2L);
         ItemDtoToReturn itemDtoToReturn2 = itemService.createItem(createItemDto2, returnUserDto1.getId());
         UpdateItemDto updateItemDto = UpdateItemDto.builder()
                 .description("text.").build();
@@ -165,30 +167,58 @@ public class ItemServiceTest {
     }
 
     @Test
+    void createCommentTest() {
+        CreateUserDto createUserDto1 = createUserDto(1L);
+        ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
+        CreateUserDto createUserDto2 = createUserDto(2L);
+        ReturnUserDto returnUserDto2 = userService.createUser(createUserDto2);
+        CreateItemDto createItemDto1 = createItemDto(1L);
+        ItemDtoToReturn itemDtoToReturn1 = itemService.createItem(createItemDto1, returnUserDto1.getId());
+
+        BookingDto bookingDto = BookingDto.builder()
+                .start(LocalDateTime.of(2020, 11, 18, 11, 11, 11))
+                .end(LocalDateTime.of(2021, 11, 18, 11, 11, 11))
+                .itemId(itemDtoToReturn1.getId())
+                .build();
+        ReturnBookingDto createdBookingDto = bookingService.createBooking(bookingDto, returnUserDto2.getId());
+        ReturnBookingDto approvedBookingDto = bookingService.setApprove(
+                createdBookingDto.getId(), true, returnUserDto1.getId());
+
+        CommentDto createCommentDto = CommentDto.builder()
+                .text("Text.")
+                .build();
+        CommentDto commentDto = itemService.createComment(
+                returnUserDto2.getId(), itemDtoToReturn1.getId(), createCommentDto);
+
+        assertEquals(commentDto.getText(), createCommentDto.getText());
+        assertEquals(commentDto.getAuthorName(), returnUserDto2.getName());
+    }
+
+    @Test
     void shouldThrownExceptions() {
         String text = "text";
         CommentDto commentDto = CommentDto.builder()
                 .text("Text.")
                 .build();
 
-        CreateUserDto createUserDto1 = createUserDto(7L);
+        CreateUserDto createUserDto1 = createUserDto(1L);
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
 
-        CreateUserDto createUserDto2 = createUserDto(8L);
+        CreateUserDto createUserDto2 = createUserDto(2L);
         ReturnUserDto returnUserDto2 = userService.createUser(createUserDto2);
 
-        CreateUserDto createUserDto3 = createUserDto(9L);
+        CreateUserDto createUserDto3 = createUserDto(3L);
         ReturnUserDto returnUserDto3 = userService.createUser(createUserDto3);
 
-        CreateItemDto createItemDto1 = createItemDto(8L);
-        CreateItemDto createItemDto2 = createItemDto(9L);
+        CreateItemDto createItemDto1 = createItemDto(1L);
+        CreateItemDto createItemDto2 = createItemDto(2L);
         ItemDtoToReturn itemDtoToReturn2 = itemService.createItem(createItemDto2, returnUserDto1.getId());
-        CreateItemDto createItemDto3 = createItemDto(10L);
+        CreateItemDto createItemDto3 = createItemDto(3L);
         ItemDtoToReturn itemDtoToReturn3 = itemService.createItem(createItemDto3, returnUserDto2.getId());
 
         assertThrows(NotOwnerException.class, () -> itemService.deleteItem(itemDtoToReturn2.getId(), returnUserDto2.getId()));
 
-        UpdateItemDto updateItemDto = updateItemDto(3L);
+        UpdateItemDto updateItemDto = updateItemDto(4L);
 
         userService.deleteUser(returnUserDto1.getId());
 
