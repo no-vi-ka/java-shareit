@@ -11,11 +11,14 @@ import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.request.dto.CreateItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +32,6 @@ public class ItemServiceTest {
     private final ItemRequestService itemRequestService;
     private final UserService userService;
     private final ItemService itemService;
-    private final BookingService bookingService;
 
     private CreateItemDto createItemDto(Long i) {
         return CreateItemDto.builder()
@@ -66,6 +68,20 @@ public class ItemServiceTest {
         ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
         CreateItemDto createItemDto = createItemDto(1L);
         ItemDtoToReturn itemDtoToReturn = itemService.createItem(createItemDto, returnUserDto1.getId());
+        CreateItemDto createItemDto2 = createItemDto(2L);
+        CreateItemRequestDto createItemRequestDto = CreateItemRequestDto.builder()
+                .description("Description")
+                .build();
+        ItemRequestDto itemRequestDto = itemRequestService.createItemRequest(returnUserDto1.getId(), createItemRequestDto);
+        createItemDto2.setRequestId(100L);
+
+        assertThrows(NotFoundException.class, () -> itemService.createItem(createItemDto2, returnUserDto1.getId()));
+
+        createItemDto2.setRequestId(itemRequestDto.getId());
+        ItemDtoToReturn itemDtoToReturn2 = itemService.createItem(createItemDto2, returnUserDto1.getId());
+
+        assertEquals(itemDtoToReturn2.getRequestId(), itemRequestDto.getId());
+
 
         assertEquals(itemDtoToReturn.getName(), createItemDto.getName());
         assertEquals(itemDtoToReturn.getDescription(), createItemDto.getDescription());

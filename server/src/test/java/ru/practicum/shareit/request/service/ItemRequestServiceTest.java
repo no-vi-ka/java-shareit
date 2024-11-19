@@ -13,6 +13,7 @@ import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -127,5 +128,19 @@ public class ItemRequestServiceTest {
                 returnUserDto1.getId()));
         assertThrows(NotFoundException.class, () -> itemRequestService.getAllItemRequest(
                 returnUserDto1.getId()));
+    }
+
+    @Test
+    void shouldReturnEmptyList() {
+        CreateUserDto createUserDto1 = createUserDto(1L);
+        ReturnUserDto returnUserDto1 = userService.createUser(createUserDto1);
+        CreateUserDto createUserDto2 = createUserDto(2L);
+        ReturnUserDto returnUserDto2 = userService.createUser(createUserDto2);
+
+        List<ItemRequestDto> finded = itemRequestService.getAllItemRequest(returnUserDto1.getId());
+        List<ItemRequestDto> finded2 = itemRequestService.getAllItemRequestForRequestor(returnUserDto2.getId());
+
+        assertEquals(finded, Collections.emptyList());
+        assertEquals(finded2, Collections.emptyList());
     }
 }

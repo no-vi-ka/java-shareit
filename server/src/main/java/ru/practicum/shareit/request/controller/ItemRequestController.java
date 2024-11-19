@@ -20,7 +20,6 @@ public class ItemRequestController {
     public ItemRequestDto addItemRequest(@RequestHeader("X-Sharer-User-Id") Long userId,
                                          @RequestBody CreateItemRequestDto itemRequestDto) {
         log.info("Получен запрос на создание запроса на вещь от пользователя с id = {}: ", userId);
-        //itemRequestDto.setUserId(userId);
         return itemRequestService.createItemRequest(userId, itemRequestDto);
     }
 
