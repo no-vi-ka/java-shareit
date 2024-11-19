@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
 import ru.practicum.shareit.item.dto.*;
@@ -17,8 +16,6 @@ import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.ReturnUserDto;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
