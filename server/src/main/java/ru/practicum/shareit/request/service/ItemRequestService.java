@@ -17,7 +17,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class ItemRequestService {
                 .orElseThrow(() -> new NotFoundException("Не найден запрос на вещь с id = " + requestId));
         List<Item> itemList = itemRepository.findAllByRequestId(requestId);
         List<ItemDtoForRequest> itemForItemRequestDtoList = itemList.stream().map(itemMapper::toItemDtoForRequest).toList();
-        ItemRequestDto itemRequestDto = itemRequestMapper.toItemRequestDto(itemRequest, itemForItemRequestDtoList);
+        ItemRequestDto itemRequestDto = itemRequestMapper.toItemRequestDtoWithItemsList(itemRequest, itemForItemRequestDtoList);
         return itemRequestDto;
     }
 
@@ -55,35 +54,20 @@ public class ItemRequestService {
         User requestor = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " not found."));
         List<ItemRequest> requests = itemRequestRepository.findByRequestorIdOrderByCreatedDesc(userId);
-        List<ItemRequestDto> finded = new ArrayList<>();
         if (requests == null) {
             return Collections.emptyList();
-        } else {
-            for (ItemRequest request : requests) {
-                List<Item> itemList = itemRepository.findAllByRequestId(request.getId());
-                List<ItemDtoForRequest> itemForItemRequestDtoList = itemList.stream().map(itemMapper::toItemDtoForRequest).toList();
-                ItemRequestDto itemRequestDto = itemRequestMapper.toItemRequestDto(request, itemForItemRequestDtoList);
-                finded.add(itemRequestDto);
-            }
-            return finded;
         }
+            return requests.stream().map(itemRequestMapper::toItemRequestDto).toList();
     }
+
 
     public List<ItemRequestDto> getAllItemRequest(Long userId) {
         User requestor = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User with id = " + userId + " not found."));
         List<ItemRequest> requests = itemRequestRepository.findByOtherUsers(userId);
-        List<ItemRequestDto> finded = new ArrayList<>();
         if (requests == null) {
             return Collections.emptyList();
-        } else {
-            for (ItemRequest request : requests) {
-                List<Item> itemList = itemRepository.findAllByRequestId(request.getId());
-                List<ItemDtoForRequest> itemForItemRequestDtoList = itemList.stream().map(itemMapper::toItemDtoForRequest).toList();
-                ItemRequestDto itemRequestDto = itemRequestMapper.toItemRequestDto(request, itemForItemRequestDtoList);
-                finded.add(itemRequestDto);
-            }
-            return finded;
+        }
+        return requests.stream().map(itemRequestMapper::toItemRequestDto).toList();
         }
     }
-}

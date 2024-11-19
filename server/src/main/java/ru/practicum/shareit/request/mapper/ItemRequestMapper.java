@@ -15,6 +15,6 @@ public interface ItemRequestMapper {
 
     ItemRequestDto toItemRequestDto(ItemRequest itemRequest);
 
-    ItemRequestDto toItemRequestDto(ItemRequest itemRequest, List<ItemDtoForRequest> items);
+    ItemRequestDto toItemRequestDtoWithItemsList(ItemRequest itemRequest, List<ItemDtoForRequest> items);
 
 }
