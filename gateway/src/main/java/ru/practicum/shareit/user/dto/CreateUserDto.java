@@ -1,0 +1,21 @@
+package ru.practicum.shareit.user.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateUserDto {
+    @NotNull(message = "name должно быть указано.")
+    @NotBlank(message = "name не должен быть пустым.")
+    private String name;
+    @NotNull(message = "email должен быть указан.")
+    @NotBlank(message = "email не должен быть пустым.")
+    @Email(message = "email должен быть указан корректно.")
+    private String email;
+}
