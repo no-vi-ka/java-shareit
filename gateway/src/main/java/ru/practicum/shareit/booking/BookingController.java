@@ -30,7 +30,6 @@ public class BookingController {
 
 	@PatchMapping("/{bookingId}")
 	public ResponseEntity<Object> approve(@PathVariable Long bookingId,
-										  //@RequestParam(name = "approved") Boolean approved,
 										  @RequestParam Boolean approved,
 										  @RequestHeader("X-Sharer-User-Id") Long userId) {
 		log.info("Пришел запрос на подтверждение бронирования с id = {}", bookingId);

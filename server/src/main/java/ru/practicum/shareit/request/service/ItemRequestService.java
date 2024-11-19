@@ -40,7 +40,6 @@ public class ItemRequestService {
         List<ItemDtoForRequest> items = Collections.emptyList();
         log.info("Создан запрос на вещь с requestorId = {}", requestor.getId());
         return itemRequestMapper.toItemRequestDto(itemRequestRepository.save(itemRequest));
-        //, items);
     }
 
     public ItemRequestDto getItemRequestById(Long userId, Long requestId) {
